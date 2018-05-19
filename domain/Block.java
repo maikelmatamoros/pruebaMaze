@@ -68,7 +68,7 @@ public class Block {
     
     public boolean in(int xMouse, int yMouse) {
 
-        return (xMouse >= this.x*size && xMouse <= this.x*size + this.size) && (yMouse >= this.y*size && yMouse <= this.y*size + this.size);
+        return (xMouse >= this.x*size && xMouse < this.x*size + this.size) && (yMouse >= this.y*size && yMouse < this.y*size + this.size);
     } // isClicked: retorna true si el botón fue clickeado y false si no
 
 

@@ -93,7 +93,7 @@ public class Proyecto3Progra2 extends Application implements Runnable {
                 }
             }
         }
-       //System.err.println(maze[1][2].getNext().size());
+       System.err.println(maze[3][2].getNext().size());
     }
 
     public ArrayList<Block> caminos(int x, int y) {

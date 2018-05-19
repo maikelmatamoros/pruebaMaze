@@ -41,13 +41,13 @@ public class Character extends Thread {
         while (flag) {
             direction = new Random().nextInt(4);
             if (next(direction)) {
+                System.err.println(this.camino.get(cont).getNext().size()+" Cont:"+ cont);
                 switch (direction) {
                     case 0:
                         while (this.camino.get(cont).in(x, y)) {
-//                            System.out.println(cont);
                             y += 1;
                             try {
-                                Thread.sleep(200);
+                                Thread.sleep(100);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(Character.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -56,7 +56,7 @@ public class Character extends Thread {
                         while (this.camino.get(cont).in(x, y)) {
                             x += 1;
                             try {
-                                Thread.sleep(200);
+                                Thread.sleep(100);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(Character.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -65,7 +65,7 @@ public class Character extends Thread {
                         while (this.camino.get(cont).in(x, y)) {
                             y -= 1;
                             try {
-                                Thread.sleep(200);
+                                Thread.sleep(100);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(Character.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -74,7 +74,7 @@ public class Character extends Thread {
                         while (this.camino.get(cont).in(x, y)) {
                             x -= 1;
                             try {
-                                Thread.sleep(200);
+                                Thread.sleep(100);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(Character.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -89,10 +89,6 @@ public class Character extends Thread {
     }
 
     public boolean next(int dir) {
-        for(int i=0;i<this.camino.get(cont).getNext().size();i++){
-            System.err.println(this.camino.get(cont).getNext().get(i).getY());
-        }
-        System.err.println("");
         int aux;
         if (dir == 0 || dir == 1) {
             aux = 1;
@@ -103,29 +99,34 @@ public class Character extends Thread {
         if (dir == 0 || dir == 2) {
             for (int i = 0; i < this.camino.get(cont).getNext().size(); i++) {
                 if (this.camino.get(cont).getNext().get(i).getY() == yPos + aux) {
-                    for (int j = 0; j < this.past.size(); j++) {
-                        if (this.camino.get(cont).getNext().get(i).getY() == this.past.get(j).getY()) {
-                            return false;
-                        }
+                    if (validation(i)) {
+                        this.camino.add(this.camino.get(cont).getNext().get(i));
+                        yPos += aux;
+                        return true;
                     }
-                    this.camino.add(this.camino.get(cont).getNext().get(i));
-                    return true;
                 }
             }
         } else {
             for (int i = 0; i < this.camino.get(cont).getNext().size(); i++) {
                 if (this.camino.get(cont).getNext().get(i).getX() == xPos + aux) {
-                    for (int j = 0; j < this.past.size(); j++) {
-                        if (this.camino.get(cont).getNext().get(i).getX() == this.past.get(j).getX()) {
-                            return false;
-                        }
+                    if (validation(i)) {
+                        this.camino.add(this.camino.get(cont).getNext().get(i));
+                        xPos += aux;
+                        return true;
                     }
-                    this.camino.add(this.camino.get(cont).getNext().get(i));
-                    return true;
                 }
             }
         }
         return false;
+    }
+
+    public boolean validation(int i) {
+        for (int j = 0; j < this.past.size(); j++) {
+            if (this.camino.get(cont).getNext().get(i).getX() == this.past.get(j).getX() && this.camino.get(cont).getNext().get(i).getY() == this.past.get(j).getY()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void draw(GraphicsContext gc) {
